@@ -1,16 +1,15 @@
-  #include "lectura_sensores_robot.h"
-  //Variables Globales
-  const int VEL_NORMAL = 100;
-  const int VEL_RAPIDA = 255;
-  // Pines del Puente H para los motores
-  const int PWMA = 11;   // PWM del motor derecho
-  const int AIN1 = 9;  // Sentido motor derecho
-  const int AIN2 =10;  // Sentido motor derecho
-  const int PWMB = 3;   // PWM del motor izquierdo
-  const int BIN1 = 8;   // Sentido motor izquierdo
-  const int BIN2 = 7;   // Sentido motor izquierdo
-  const int STBY=5; //Stand By. Frena los motores.
-
+#include "lectura_sensores_robot.h"
+//Variables Globales
+const int VEL_NORMAL = 50;
+const int VEL_RAPIDA = 100;
+// Pines Motores 
+const int PWMA = 9;     // PWM motor derecho
+const int AIN1 = 7;      // Sentido 1 motor derecho
+const int AIN2 = 8;     // Sentido 2 motor derecho
+const int PWMB = 3;      // PWM motor izquierdo
+const int BIN1 = 5;      // Sentido 1 motor izquierdo
+const int BIN2 = 4;      // Sentido 2 motor izquierdo
+const int STBY = 6;      // Pin para STBY
 
   // -------------------------
   // Funciones de Movimiento

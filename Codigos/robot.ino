@@ -2,13 +2,13 @@
 // RAMA IEEE UNAL: CEIMTUN - RAS MINISUMO
 // --------------------------------
 
-#include "movimiento.h" // Librería personalizada creada por nosotros
+#include "movimiento.h" // Librería creada por nosotros
 
 // ------------------------------
 // CONFIGURACIONES Y DEFINICIONES
 // ------------------------------
 
-const int sensoresIR[]   = {A7, A3, A4, A5}; // [lateral_izq, frontal_izq, frontal_der, lateral_der]
+const int sensoresIR[]   = {A6, A2, A3, A7}; // [lateral_izq, frontal_izq, frontal_der, lateral_der]
 const int numSensoresIR  = 4;
 
 const int sensoresQtr[]  = {A0, A1};         // [izquierdo, derecho]
@@ -54,10 +54,6 @@ void leerTodosLosSensores() {
 void setup() {
   Serial.begin(9600);
 
-  Serial.println("=====================================");
-  Serial.println(" INICIANDO ROBOT SUMO - RAMA IEEE UNAL");
-  Serial.println("=====================================");
-
   for (int i = 0; i < numSensoresIR; i++) {
     pinMode(sensoresIR[i], INPUT);
   }
@@ -81,7 +77,7 @@ void Buscar() {
   girarMoviendoseDerecha();
 
   indiceMin = obtenerIndiceMinimo(valoresIR, numSensoresIR);
-  Serial.print("Sensor con valor mínimo: ");
+  Serial.print("Sensor con valor mínimo es: ");
   Serial.println(indiceMin);
 
   corregirDireccion(indiceMin);
@@ -116,7 +112,10 @@ void Acercarse() {
 // ------------------------------
 void Ataque() {
   Serial.println("-> ESTADO: ATAQUE");
+
   moverAdelanteRapido();
+
+  nuevoIndiceMin = obtenerIndiceMinimo(valoresIR, numSensoresIR);
 
   if (valoresIR[nuevoIndiceMin] >= 100) {
     Serial.println("ROMPIENDO ZONA MUERTA CON EMPUJE");
@@ -124,7 +123,6 @@ void Ataque() {
     return;
   }
 
-  nuevoIndiceMin = obtenerIndiceMinimo(valoresIR, numSensoresIR);
 
   if (valoresIR[nuevoIndiceMin] > umbralDeteccion) {
     Serial.println("PERDÍ AL ENEMIGO -> CAMBIO A BUSCAR");
@@ -179,13 +177,13 @@ void cambiarEstado() {
   nuevoIndiceMin = obtenerIndiceMinimo(valoresIR, numSensoresIR);
   float valorMinActual = valoresIR[nuevoIndiceMin];
 
-  Serial.print("TRANSICIÓN FSM -> Sensor: ");
+  /*Serial.print("TRANSICIÓN FSM -> Sensor: ");
   Serial.print(nuevoIndiceMin);
   Serial.print(" | Valor: ");
-  Serial.println(valorMinActual);
+  Serial.println(valorMinActual);*/
 
   if (valorMinActual >= 100.00) {
-    if (nuevoIndiceMin==2) {
+    if (nuevoIndiceMin==1 || nuevoIndiceMin==2) {
       estadoActual = ATAQUE;
       Serial.println("ENEMIGO MUY CERCA (FRENTE) -> FORZANDO ATAQUE");
     } else {
@@ -193,7 +191,7 @@ void cambiarEstado() {
       Serial.println("ENEMIGO MUY CERCA (LATERAL) -> FORZANDO ESQUIVA");
     }
   } 
-  else if ((nuevoIndiceMin ==0 ||nuevoIndiceMin == 2) && valorMinActual <= umbralAtaque) {
+  else if ((nuevoIndiceMin ==1 ||nuevoIndiceMin == 2) && valorMinActual <= umbralAtaque) {
     estadoActual = ATAQUE;
   } 
   else if (valorMinActual <= umbralDeteccion) {
@@ -222,7 +220,7 @@ void loop() {
     Serial.println(" cm");
   }
   Serial.println("------------------------------------");
-  delay(1200); // Cambiar a millis() cuando ya terminemos pruebas
+  //delay(1200); // Cambiar a millis() cuando ya terminemos pruebas. Esteban por favor antes de usar el codigo revisa con solo lectura de sensores que responda a lo que queremos, ya luego quitas esto y lo pruebas por fa
 
   // FSM: Ejecución según estado actual
   switch (estadoActual) {
@@ -271,10 +269,10 @@ void corregirDireccion(int minIdx) {
       girarIzquierda();
       break;
     case 3:
-      Serial.println("Enemigo detectado a la izquierda: Giro Izquierda del todo para alinearme");
+      Serial.println("Enemigo detectado a la derecha: Giro Izquierda del todo para alinearme");
       girarIzquierdaRapido(); 
     default:
-      Serial.println("CORRECCIÓN: Sin acción (Índice desconocido)");
+      Serial.println("Sin Accion");
       break;
   }
 }
