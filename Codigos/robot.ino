@@ -47,7 +47,6 @@ void leerTodosLosSensores() {
     valoresQtr[i] = leerSensorQtr(sensoresQtr[i]);*/ //Probemos primero sin qtr
 }
 
-
 // ------------------------------
 // SETUP
 // ------------------------------
@@ -93,20 +92,20 @@ void Acercarse() {
 
   if (valoresIR[nuevoIndiceMin] > umbralDeteccion) {
     Serial.println("PERDÍ AL ENEMIGO -> CAMBIO A BUSCAR");
-    return;
+    return; 
   }
 
   if (nuevoIndiceMin != indiceMin) {
     indiceMin = nuevoIndiceMin;
     Serial.print("El enemigo se movió, corrigiendo a sensor: ");
     Serial.println(indiceMin);
+
+  }if(indiceMin != 1 && indiceMin != 2){
     corregirDireccion(indiceMin);
-  }else
-  
-
-  moverAdelante();
+} else {
+    moverAdelante();
 }
-
+}
 // ------------------------------
 // ESTRATEGIA: ATAQUE
 // ------------------------------
@@ -123,7 +122,6 @@ void Ataque() {
     return;
   }
 
-
   if (valoresIR[nuevoIndiceMin] > umbralDeteccion) {
     Serial.println("PERDÍ AL ENEMIGO -> CAMBIO A BUSCAR");
     return;
@@ -136,7 +134,6 @@ void Ataque() {
     corregirDireccion(indiceMin);
   }
 }
-
 
 // ------------------------------
 // ESTRATEGIA: REINTEGRARSE (SIN USO ACTUAL PORQUE ESTÁ SIN QTR)
@@ -167,7 +164,6 @@ void Esquivar() {
       break;
   }
 }
-
 
 
 // ------------------------------
@@ -220,7 +216,7 @@ void loop() {
     Serial.println(" cm");
   }
   Serial.println("------------------------------------");
-  //delay(1200); // Cambiar a millis() cuando ya terminemos pruebas. Esteban por favor antes de usar el codigo revisa con solo lectura de sensores que responda a lo que queremos, ya luego quitas esto y lo pruebas por fa
+  //delay(1000); // Cambiar a millis() cuando ya terminemos pruebas. Esteban por favor antes de usar el codigo revisa con solo lectura de sensores que responda a lo que queremos, ya luego quitas esto y lo pruebas por fa
 
   // FSM: Ejecución según estado actual
   switch (estadoActual) {
@@ -258,23 +254,25 @@ void corregirDireccion(int minIdx) {
   switch (minIdx) {
     case 0:
       Serial.println("Enemigo detectado a la izquierda: Giro Derecha del todo para alinearme");
-      girarDerechaRapido();
+      girarIzquierdaRapido();
+      delay(50);
       break;
-    case 1:
+    /*case 1:
       Serial.println("Enemigo detectado de frente pero ligeramente a la izquierda: Giro Derecha un poco para alinearme");
-      girarDerecha();
+      girarIzquierda();
+      delay(50);
       break;
     case 2:
       Serial.println("Enemigo detectado de frente pero ligeramente a la derecha: Giro Izquierda para alinearme");
-      girarIzquierda();
-      break;
+      girarDerecha();
+      delay(50);
+      break;*/
     case 3:
       Serial.println("Enemigo detectado a la derecha: Giro Izquierda del todo para alinearme");
-      girarIzquierdaRapido(); 
+      girarDerechaRapido(); 
+      delay(50);
     default:
       Serial.println("Sin Accion");
       break;
   }
 }
-
-

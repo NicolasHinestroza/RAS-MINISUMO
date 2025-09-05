@@ -1,7 +1,8 @@
 #include "lectura_sensores_robot.h"
 //Variables Globales
 const int VEL_NORMAL = 50;
-const int VEL_RAPIDA = 100;
+const int VEL_RAPIDA = 130;
+const int VEL_GIRO_LENTO=70;
 // Pines Motores 
 const int PWMA = 9;     // PWM motor derecho
 const int AIN1 = 7;      // Sentido 1 motor derecho
@@ -54,7 +55,7 @@ const int STBY = 6;      // Pin para STBY
   }
 
   void girarIzquierda(){
-    moverAmbosMotores(VEL_NORMAL, true, VEL_NORMAL, false);
+    moverAmbosMotores(VEL_NORMAL, true, VEL_GIRO_LENTO, false);
   }
 
   void girarIzquierdaRapido(){
@@ -62,7 +63,7 @@ const int STBY = 6;      // Pin para STBY
   }
 
   void girarDerecha(){
-    moverAmbosMotores(VEL_NORMAL, false, VEL_NORMAL, true);
+    moverAmbosMotores(VEL_NORMAL, false, VEL_GIRO_LENTO, true);
   }
 
   void girarDerechaRapido(){

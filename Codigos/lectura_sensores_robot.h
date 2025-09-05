@@ -1,34 +1,34 @@
-  const int NUM_LECTURAS = 10;
-  const int QTR_UMBRAL=200; //OJO Esteban, este umbral se debe cuadrar de manera practica
-  const float V_REF = 5.0;
-  const float k1 = 18.9;
-  const float k2 = -0.896; 
+const int NUM_LECTURAS = 10;
+const int QTR_UMBRAL=200; //OJO Esteban, este umbral se debe cuadrar de manera practica
+const float V_REF = 5.0;
+const float k1 = 18.9;
+const float k2 = -0.896; 
 
-  const int ADC_MIN_SATURADO = 450;
-  const float DISTANCIA_MAXIMA = 100.0; // Valor fijo para "no detectado"
+const int ADC_MIN_VALIDO = 5;  // Lecturas menores se consideran "fuera de rango"
+const float DISTANCIA_MAXIMA = 100.0; // Valor fijo para "no detectado"
 
-  // Ordena el arreglo con Insertion Sort
-  void ordenarValores(int array[]) {
-    for (int j = 1; j < NUM_LECTURAS; j++) {
-      int actual = array[j];
-      int i = j - 1;
-      while (i >= 0 && array[i] > actual) {
-        array[i + 1] = array[i];
-        i--;
-      }
-      array[i + 1] = actual;
+// Ordena el arreglo con Insertion Sort
+void ordenarValores(int array[]) {
+  for (int j = 1; j < NUM_LECTURAS; j++) {
+    int actual = array[j];
+    int i = j - 1;
+    while (i >= 0 && array[i] > actual) {
+      array[i + 1] = array[i];
+      i--;
     }
+    array[i + 1] = actual;
+  }
+}
+
+// Convierte un valor ADC a cm
+float adcToCm(int adcValue){
+  if (adcValue <= ADC_MIN_VALIDO) {
+    return DISTANCIA_MAXIMA; // Si la lectura es muy baja, lo marco como fuera de rango
   }
 
-  // Convierte un valor ADC a cm
-  float adcToCm(int adcValue){
-    if (adcValue >= ADC_MIN_SATURADO) {
-      return DISTANCIA_MAXIMA; // Si estoy en la zona muerta, lo mando a esta constante
-    }
-
-    float voltage = (adcValue * V_REF) / 1023.0;
-    return pow(voltage * (1.0 / k1), 1.0 / k2);
-  }
+  float voltage = (adcValue * V_REF) / 1024.0;
+  return pow(voltage * (1.0 / k1), 1.0 / k2);
+}
 
 // Calcula la mediana y la convierte a cm
 float calcularMediana(int array[]) {
